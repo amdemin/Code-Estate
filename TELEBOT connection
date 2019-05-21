@@ -1,0 +1,14 @@
+import requests
+import telebot
+from telebot import apihelper
+
+apihelper.proxy = {'https': '201.64.22.50:80'}
+
+
+TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    msg = bot.reply_to(message, "Будет скоро добавлено")
+bot.polling()
