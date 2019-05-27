@@ -1,0 +1,29 @@
+import requests
+import telebot
+from telebot import apihelper
+
+def check_data(word):
+    with open("pj_data/cities.txt", "r") as f:
+        data = []
+        for i in f:
+            data.append(i.strip("\n"))
+        if word.upper() in data:
+            return word
+        else:
+            return 0
+
+apihelper.proxy = {'https': '201.64.22.50:80'}
+
+
+TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(content_types=['text'])
+def start(message):
+    word = message.text
+    if word == "/start":
+        wlcome = bot.send_message(message.from_user.id, "Hello, write a city where you want to buy a house in the US")
+    else:
+        city = check_data(word)
+        if city == 0:
+            msg = bot.send_message(message.from_user.id, "We're sorry, we don't provide our service for this place")
