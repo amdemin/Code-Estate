@@ -1,6 +1,8 @@
 import requests
 import telebot
+import time
 from telebot import apihelper
+from emoji import emojize
 
 
 def check_data(word):
@@ -73,9 +75,118 @@ def process_data(word, result):
         price = price[0] + " " + price[1:4] + " " + price[4:7]
     return link, street, price
 
+
+def weather_process(city):
+    city = city + ", US"
+    city_id = 0
+    appid = "cbef99a3cbefe4b3787cf92d537b8f54"
+    try:
+        p = {'q': city, 'type': 'like', 'units': 'metric', 'APPID': appid}
+        URL = "http://api.openweathermap.org/data/2.5/find"
+        res = requests.get(URL, params=p)
+        data = res.json()
+        city_id = data['list'][0]['id']
+    except Exception as e:
+        print("Exception (find):", e)
+        pass
+    try:
+        p = {'id': city_id, 'units': 'metric', 'lang': 'eng', 'APPID': appid}
+        URL = "http://api.openweathermap.org/data/2.5/forecast"
+        res = requests.get(URL, params=p)
+        data = res.json()
+        store_data = []
+        morning_weather = m_w = []
+        afternoon_weather = a_w = []
+        sky = []
+        k = 0
+        for i in data['list']:
+            a = i['dt_txt']
+            b = a.split(" ")
+            a = [b, '{0:+3.0f}'.format(i['main']['temp']), i['weather'][0]['description']]
+            store_data.append(a)
+            clouds = store_data[0][2]
+            hour = store_data[k][0][1]
+            date = store_data[k][0][0]
+            if hour in "12:00:00" and date not in m_w and len(m_w) < 8:
+                morning_weather.append(date)
+                morning_weather.append(store_data[k][1])
+                sky.append(date)
+                sky.append(store_data[k][2])
+            if hour in "18:00:00" and date not in a_w and len(a_w) < 8:
+                afternoon_weather.append(date)
+                afternoon_weather.append(store_data[k][1])
+            k += 1
+        pogoda = morning_weather + afternoon_weather
+        a = time.ctime()
+        months = [
+            ["Months"], ["January"], ["February"],
+            ["March"], ["April"], ["May"], ["June"],
+        ]
+        day = int(a[8:10])
+        days_time = [
+            ["Mon"], ["Tue"], ["Wed"], ["Thu"],
+            ["Fri"], ["Sat"], ["Sun"], ["Mon"],
+            ["Tue"], ["Wed"], ["Thu"], ["Fri"],
+            ["Sat"], ["Sun"]]
+        for i in range(0, len(days_time)):
+            if days_time[i][0] in a:
+                day_count = i
+                break
+        key = 0
+        while key < len(months):
+            if months[key][0] in a:
+                break
+            key += 1
+        year_month = "2019-" + "0" + str(key) + "-"
+        num = 1
+        final_temps = []
+        dates = []
+        while num < 4:
+            sum_day = day + num
+            if 9 < sum_day <= 31:
+                data2 = year_month + str(sum_day)
+            elif sum_day > 31:
+                sum_day = sum_day - 31
+                data2 = "2019-" + "0" + str(key+1) + "-" + "0" + str(sum_day)
+            elif sum_day < 9:
+                data2 = year_month + "0" + str(sum_day)
+            for i in range(0, len(pogoda)):
+                if data2 in pogoda[i]:
+                    final_temps.append(pogoda[i+1])
+            dates.append(data2)
+            num += 1
+        p = {"q": city, "APPID": appid, "units": "metric"}
+        URL = "http://api.openweathermap.org/data/2.5/weather"
+        now = requests.get(URL, params=p)
+        now = now.json()
+        temperature = now["main"]["temp"]
+        counter_day = 1
+        min = 0
+        max = 1
+        count_week_day = 0
+        day_of_week = days_time[day_count + 2][0]
+        day_of_week_more = days_time[day_count + 3][0]
+        days = ["Tomorrow", day_of_week, day_of_week_more]
+        print_now = ["Now", "+" + str(round(temperature)), clouds]
+        print_next_days = []
+        while counter_day < 4:
+            for i in range(0, len(sky), 2):
+                if dates[count_week_day] in sky[i]:
+                    cond = sky[i+1]
+                    break
+            row = [days[count_week_day], final_temps[min], final_temps[max], cond]
+            print_next_days.append(row)
+            min += 2
+            max += 2
+            counter_day += 1
+            count_week_day += 1
+        return print_now, print_next_days
+    except Exception as e:
+        print("Exception (forecast):", e)
+        pass
+
+
 apihelper.proxy = {'https': '201.64.22.50:80'}
-
-
 TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
 bot = telebot.TeleBot(TOKEN)
 
@@ -101,8 +212,21 @@ def price(message, result, city):
         a = str(word)
         a = a.split()
         word = int("".join(a))
-        if 10000 < word < 2500000:
-            link, street, number = process_data(word, result)
+        if 10000 < word < 25000000:
+                link, street, number = process_data(word, result)
+                msg1 = bot.send_message(message.from_user.id, "This is your link: " + link)
+                msg2 = bot.send_message(message.from_user.id, "The address is: " + street)
+                msg3 = bot.send_message(message.from_user.id, emojize("The price is: " + str(number) + " :heavy_dollar_sign:", use_aliases=True))
+                msg4 = bot.send_message(message.from_user.id, "Do you want to get the weather, here?")
+                bot.register_next_step_handler(message, weather, city)
+        else:
+            msg = bot.send_message(message.from_user.id, "The price is not compatible")
     except:
         msg = bot.send_message(message.from_user.id, "Wrong price")
 
+
+def weather(message, city):
+    word = message.text
+    words = ["YES", "YEAH", "YA", "SURE", "OF COURSE", "YEP", "DA"]
+    if message.text.upper() in words:
+        print_1, print_2 = weather_process(city)
