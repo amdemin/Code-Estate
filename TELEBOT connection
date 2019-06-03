@@ -1,6 +1,6 @@
 import requests
-import telebot
 import time
+import telebot
 from telebot import apihelper
 from emoji import emojize
 
@@ -119,8 +119,10 @@ def weather_process(city):
         pogoda = morning_weather + afternoon_weather
         a = time.ctime()
         months = [
-            ["Months"], ["January"], ["February"],
-            ["March"], ["April"], ["May"], ["June"],
+            ["Months"], ["Jan"], ["Feb"],
+            ["Mar"], ["Apr"], ["May"], ["Jun"],
+            ["Jul"], ["Aug"], ["Sep"], ["Nov"],
+            ["Dec"]
         ]
         day = int(a[8:10])
         days_time = [
@@ -143,12 +145,12 @@ def weather_process(city):
         dates = []
         while num < 4:
             sum_day = day + num
-            if 9 < sum_day <= 31:
+            if 10 <= sum_day <= 31:
                 data2 = year_month + str(sum_day)
             elif sum_day > 31:
                 sum_day = sum_day - 31
                 data2 = "2019-" + "0" + str(key+1) + "-" + "0" + str(sum_day)
-            elif sum_day < 9:
+            elif sum_day < 10:
                 data2 = year_month + "0" + str(sum_day)
             for i in range(0, len(pogoda)):
                 if data2 in pogoda[i]:
@@ -186,15 +188,28 @@ def weather_process(city):
         pass
 
 
-apihelper.proxy = {'https': '201.64.22.50:80'}
+def emoji_process(condition):
+    dict = {}
+    with open("pj_data/emoji.txt", "r") as f:
+        line = f.readline()
+        while len(line) > 1:
+            line = line.strip("\n")
+            parts = line.split(", ")
+            dict[parts[0]] = parts[1]
+            line = f.readline()
+    return dict[condition]
+
+
+apihelper.proxy = {'https': '38.86.51.100:3128'}
 TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
 bot = telebot.TeleBot(TOKEN)
+
 
 @bot.message_handler(content_types=['text'])
 def start(message):
     word = message.text
     if word == "/start":
-        wlcome = bot.send_message(message.from_user.id, "Hello, write a city where you want to buy a house in the US")
+        welcome = bot.send_message(message.from_user.id, "Hello, write a city where you want to buy a house in the US")
     else:
         city = check_data(word)
         if city == 0:
@@ -204,10 +219,11 @@ def start(message):
             URL = ('http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz17xlur7ze2z_5kvb6&address=street&citystatezip=' + str(word))
             result = requests.get(URL)
             bot.register_next_step_handler(message, price, result, city)
-       
+
 
 def price(message, result, city):
     try:
+        flag = True
         word = message.text
         a = str(word)
         a = a.split()
@@ -219,14 +235,36 @@ def price(message, result, city):
                 msg3 = bot.send_message(message.from_user.id, emojize("The price is: " + str(number) + " :heavy_dollar_sign:", use_aliases=True))
                 msg4 = bot.send_message(message.from_user.id, "Do you want to get the weather, here?")
                 bot.register_next_step_handler(message, weather, city)
+                flag = False
         else:
-            msg = bot.send_message(message.from_user.id, "The price is not compatible")
+            msg = bot.send_message(message.from_user.id, "The price is not compatible, write another one")
+            bot.register_next_step_handler(message, price, result, city)
     except:
-        msg = bot.send_message(message.from_user.id, "Wrong price")
+        msg = bot.send_message(message.from_user.id, "Wrong price, write a real number")
+        bot.register_next_step_handler(message, price, result, city)
 
 
 def weather(message, city):
     word = message.text
     words = ["YES", "YEAH", "YA", "SURE", "OF COURSE", "YEP", "DA"]
-    if message.text.upper() in words:
+    initial = ":Russia:"
+    if word.upper() in words:
         print_1, print_2 = weather_process(city)
+        a = print_1[0] + " " + print_1[1]
+        condition = print_1[2]
+        try:
+            result = emoji_process(condition)
+        except Exception:
+            result = initial
+        msg1 = bot.send_message(message.from_user.id, emojize(a + " " + result, use_aliases=True))
+        for i in range(0, len(print_2)):
+            a = print_2[i][0] + " " + print_2[i][1] + " " + print_2[i][2]
+            condition = print_2[i][3]
+            try:
+                result = emoji_process(condition)
+            except Exception:
+                result = initial
+            msg2 = bot.send_message(message.from_user.id, emojize(a + " " + result, use_aliases=True))
+    else:
+        msg5 = bot.send_message(message.from_user.id, "Ok, thank's for using our service")
+bot.polling()
