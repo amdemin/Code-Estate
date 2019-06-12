@@ -1,8 +1,0 @@
-    
-import requests
-
-
-ZWSID = "X1-ZWz17xlur7ze2z_5kvb6"
-r = requests.get('http://www.zillow.com/webservice/GetSearchResults.htm?zws-id..')
-
-print(r.text)
