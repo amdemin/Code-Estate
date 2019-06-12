@@ -6,7 +6,7 @@ from emoji import emojize
 
 
 def check_data(word):
-    with open("pj_data/cities.txt", "r") as f:
+    with open("cities.txt", "r") as f:
         data = []
         for i in f:
             data.append(i.strip("\n"))
@@ -190,7 +190,7 @@ def weather_process(city):
 
 def emoji_process(condition):
     dict = {}
-    with open("pj_data/emoji.txt", "r") as f:
+    with open("emoji.txt", "r") as f:
         line = f.readline()
         while len(line) > 1:
             line = line.strip("\n")
