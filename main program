@@ -200,7 +200,7 @@ def emoji_process(condition):
     return dict[condition]
 
 
-apihelper.proxy = {'https': '188.217.238.87:8118'}
+apihelper.proxy = {'https': '182.156.253.150:3128'}
 TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
 bot = telebot.TeleBot(TOKEN)
 
