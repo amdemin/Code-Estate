@@ -247,7 +247,7 @@ def price(message, result, city):
 def weather(message, city):
     word = message.text
     words = ["YES", "YEAH", "YA", "SURE", "OF COURSE", "YEP", "DA"]
-    initial = ":Russia:"
+    initial = ":cloud:"
     if word.upper() in words:
         print_1, print_2 = weather_process(city)
         a = print_1[0] + " " + print_1[1]
