@@ -121,8 +121,8 @@ def weather_process(city):
         months = [
             ["Months"], ["Jan"], ["Feb"],
             ["Mar"], ["Apr"], ["May"], ["Jun"],
-            ["Jul"], ["Aug"], ["Sep"], ["Nov"],
-            ["Dec"]
+            ["Jul"], ["Aug"], ["Sep"], ["Oct"],
+            ["Nov"], ["Dec"]
         ]
         day = int(a[8:10])
         days_time = [
@@ -139,7 +139,7 @@ def weather_process(city):
             if months[key][0] in a:
                 break
             key += 1
-        year_month = "2019-" + "0" + str(key) + "-"
+        year_month = "2019-" + str(key) + "-"
         num = 1
         final_temps = []
         dates = []
@@ -149,9 +149,9 @@ def weather_process(city):
                 data2 = year_month + str(sum_day)
             elif sum_day > 31:
                 sum_day = sum_day - 31
-                data2 = "2019-" + "0" + str(key+1) + "-" + "0" + str(sum_day)
+                data2 = "2019-" + str(key+1) + "-" + "0" + str(sum_day)
             elif sum_day < 10:
-                data2 = year_month + "0" + str(sum_day)
+                data2 = year_month + str(sum_day) # здесь изначально было "0" + str(sum_day), но месяц октябрь двузначный
             for i in range(0, len(pogoda)):
                 if data2 in pogoda[i]:
                     final_temps.append(pogoda[i+1])
@@ -200,7 +200,7 @@ def emoji_process(condition):
     return dict[condition]
 
 
-apihelper.proxy = {'https': '182.156.253.150:3128'}
+# apihelper.proxy = {'https': '37.187.21.85:3128'}
 TOKEN = '712198756:AAFum0yBbaIkZf_0vdSLEEFOUO-A_526dII'
 bot = telebot.TeleBot(TOKEN)
 
@@ -247,7 +247,7 @@ def price(message, result, city):
 def weather(message, city):
     word = message.text
     words = ["YES", "YEAH", "YA", "SURE", "OF COURSE", "YEP", "DA"]
-    initial = ":cloud:"
+    initial = ":Russia:"
     if word.upper() in words:
         print_1, print_2 = weather_process(city)
         a = print_1[0] + " " + print_1[1]
