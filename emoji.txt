@@ -6,8 +6,8 @@ very heavy rain, :cloud_with_rain:
 light intensity shower rain, :cloud_with_rain:
 shower rain, :cloud_with_rain:
 ragged shower rain, :cloud_with_rain:
-light snow, :snow:
-snow, :snow:
+light snow, :snowflake:
+snow, :snowflake:
 overcast clouds, :cloud:
 broken clouds, :sun_behind_large_cloud:
 few clouds, :sun_behind_cloud:
