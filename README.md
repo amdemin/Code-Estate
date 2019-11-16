@@ -1,4 +1,4 @@
-Hello
+Hello, the bot is called @CodeEstate_Bot
 
 There are two files.txt (cities, emoji), they should be in same directory as the main programme.
 
