@@ -1,0 +1,16 @@
+clear sky, :sun:
+moderate rain, :cloud_with_rain:
+light rain, :cloud_with_rain:
+heavy intensity rain, :cloud_with_rain:
+very heavy rain, :cloud_with_rain:
+light intensity shower rain, :cloud_with_rain:
+shower rain, :cloud_with_rain:
+ragged shower rain, :cloud_with_rain:
+light snow, :snowflake:
+snow, :snowflake:
+overcast clouds, :cloud:
+broken clouds, :sun_behind_large_cloud:
+few clouds, :sun_behind_cloud:
+scattered clouds, :sun_behind_cloud:
+mist, :fog:
+fog, :fog:
