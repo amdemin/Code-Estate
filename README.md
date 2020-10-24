@@ -12,9 +12,8 @@ It is hosted on PaaS Heroku.
   * create an account in heroku and deploy github repository (Procfile and requirements.txt are necessary for deployment)
 
 ## WorkFlow
-  ![Image of WorkingProgress](images/workflow.jpg)
-  ![Image of OpenedLink](images/link.jpg)
-  <img src="images/link.jpg" width="50%" height="50%" alt="some_text">
+  <img src="images/link.jpg" width="40%" height="40%" alt="working_progress">
+  <img src="images/link.jpg" width="40%" height="40%" alt="opened_link">
 
 ## P.S.
  * for emoji symbols you can find codes here -> https://www.webfx.com/tools/emoji-cheat-sheet/
