@@ -1,16 +1,16 @@
 # Hello :grinning:
-# This bot is created to search real estate across big cities of US
+## This bot is created to search real estate across big cities of US
 ## @CodeEstate_Bot https://t.me/CodeEstate_Bot
 
 It is hosted on PaaS Heroku.
 
 ## Requirements
-  * `pip install *PyTelegramBotApi*`
-  * `pip install *emoji*`
+  * `pip install PyTelegramBotApi`
+  * `pip install emoji`
   * get API keys from *Zillow* (real estate platform), *OpenWeather* and *Telegram Bot Father*
   * create *Procfile* and enter the name of file to run
   * create *requirements.txt* list
-  * create an account in heroku and deploy github repository (Procfile and requirements.txt are necessary for deployment)
+  * create an account in Heroku and deploy GitHub repository (Procfile and requirements.txt are necessary for deployment)
 
 ## WorkFlow
   <img src="images/workflow.jpg" width="40%" height="40%" alt="working_progress">
