@@ -14,7 +14,7 @@ It is hosted on PaaS Heroku.
 ## WorkFlow
   ![Image of WorkingProgress](images/workflow.jpg)
   ![Image of OpenedLink](images/link.jpg)
-  <img src="images/link.jpg" width="700px" height="400px" alt="some_text">
+  <img src="images/link.jpg" width="50%" height="50%" alt="some_text">
 
 ## P.S.
  * for emoji symbols you can find codes here -> https://www.webfx.com/tools/emoji-cheat-sheet/
