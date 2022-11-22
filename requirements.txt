@@ -25,7 +25,7 @@ pandas==0.24.2
 pdf2image==1.9.0
 pdfkit==0.6.1
 pep8==1.7.1
-Pillow==7.1.2
+Pillow==9.3.0
 progressbar==2.5
 psycopg2==2.8.4
 pycodestyle==2.5.0
